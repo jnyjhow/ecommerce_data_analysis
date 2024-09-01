@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["jnyjhow <jhonatan_yamane@hotmail.com>"]
 readme = "README.md"
-packages = [{include = "ecommerce_data_analysis"}]
+packages = [{include = "ecommerce_data_analysis", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
