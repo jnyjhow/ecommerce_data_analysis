@@ -11,3 +11,12 @@ services:
     command: poetry run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fastapi_tests
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: poetry run pytest
