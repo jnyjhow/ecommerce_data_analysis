@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "ecommerce-data-analysis"
+version = "0.1.0"
+description = ""
+authors = ["jnyjhow <jhonatan_yamane@hotmail.com>"]
+readme = "README.md"
+packages = [{include = "ecommerce_data_analysis"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.2.2"
+fastapi = "^0.112.2"
+uvicorn = "^0.30.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
