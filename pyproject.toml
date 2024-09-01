@@ -4,7 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["jnyjhow <jhonatan_yamane@hotmail.com>"]
 readme = "README.md"
-packages = [{include = "ecommerce_data_analysis"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -16,6 +15,7 @@ uvicorn = "^0.30.6"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
 httpx = "^0.27.2"
+
 
 [build-system]
 requires = ["poetry-core"]
