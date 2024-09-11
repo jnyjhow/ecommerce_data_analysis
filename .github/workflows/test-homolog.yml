@@ -19,18 +19,22 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-compose
 
-    - name: Build Docker Image
+    - name: Build and Start Docker Containers
       run: |
         docker-compose build
 
+    - name: Verify Running Containers
+      run: |
+        docker ps
+    
     # - name: Run Tests with Docker
     #   run: |
     #     docker-compose run --rm test
 
-    - name: Run Tests with Docker [app_mercado_livre]
+    - name: Run Python Script inside Docker [app_mercado_livre]
       run: |
-        docker-compose run --rm app_mercado_livre
-    
+        docker-compose run -rm app_mercado_livre
+
     - name: Generate UUID Version
       id: uuid_version
       run: echo "::set-output name=uuid::$(uuidgen)"
@@ -49,4 +53,7 @@ jobs:
         docker tag ${{ env.DOCKER_IMAGE_NAME }}:latest $IMAGE_NAME:$UUID_VERSION
         docker push $IMAGE_NAME:latest
         docker push $IMAGE_NAME:$UUID_VERSION
-        
+
+    - name: Stop and Remove Containers
+      run: |
+        docker-compose down
