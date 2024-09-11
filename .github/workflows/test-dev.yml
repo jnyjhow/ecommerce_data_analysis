@@ -54,3 +54,7 @@ jobs:
     - name: Stop FastAPI server
       run: |
         pkill -f "uvicorn"
+
+    - name: Test mercado_livre_app
+      run: |
+        poetry run python ./src/ws_mercado_livre/app.py
