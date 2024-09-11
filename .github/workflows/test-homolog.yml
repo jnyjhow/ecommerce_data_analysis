@@ -26,11 +26,14 @@ jobs:
     - name: Verify Running Containers
       run: |
         docker ps
+    
+    # - name: Run Tests with Docker
+    #   run: |
+    #     docker-compose run --rm test
 
     - name: Run Python Script inside Docker [app_mercado_livre]
       run: |
-        docker-compose exec app_mercado_livre python /app/app.py
-      shell: /usr/bin/bash -e {0}
+        docker-compose run -rm app_mercado_livre
 
     - name: Generate UUID Version
       id: uuid_version
