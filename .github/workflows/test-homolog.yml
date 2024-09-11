@@ -27,7 +27,7 @@ jobs:
     #   run: |
     #     docker-compose run --rm test
 
-    - name: Run Tests with Docker [mercado_livre_app]
+    - name: Run Tests with Docker [app_mercado_livre]
       run: |
         docker-compose run --rm app_mercado_livre
     
