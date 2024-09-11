@@ -21,7 +21,7 @@ jobs:
 
     - name: Build and Start Docker Containers
       run: |
-        docker-compose up --build -d
+        docker-compose build
 
     - name: Verify Running Containers
       run: |
