@@ -21,7 +21,7 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        docker-compose build
+        docker-compose up --build -d
 
     # - name: Run Tests with Docker
     #   run: |
@@ -29,7 +29,7 @@ jobs:
 
     - name: Run Tests with Docker [app_mercado_livre]
       run: |
-        docker-compose run --rm app_mercado_livre
+        docker-compose exec app_mercado_livre python /app/app.py
     
     - name: Generate UUID Version
       id: uuid_version
