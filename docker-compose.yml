@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: docker/ws_mercado_livre/Dockerfile
-    container_name: mercado_livre_app
+    container_name: app_mercado_livre
     environment:
       - PYTHONUNBUFFERED=1
     #command: poetry run python app.py
