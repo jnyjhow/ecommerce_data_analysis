@@ -27,7 +27,7 @@ jobs:
     #   run: |
     #     docker-compose run --rm test
 
-    - name: Run Tests with Docker [app_mercado_livre]
+    - name: Run Python Script inside Docker [app_mercado_livre]
       run: |
         docker-compose exec app_mercado_livre python /app/app.py
     
@@ -49,4 +49,8 @@ jobs:
         docker tag ${{ env.DOCKER_IMAGE_NAME }}:latest $IMAGE_NAME:$UUID_VERSION
         docker push $IMAGE_NAME:latest
         docker push $IMAGE_NAME:$UUID_VERSION
+
+    - name: Stop Container
+      run: |
+        docker-compose down
         
