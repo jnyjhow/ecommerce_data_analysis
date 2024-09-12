@@ -33,7 +33,7 @@ jobs:
 
     - name: Run Python Script inside Docker [app_mercado_livre]
       run: |
-        docker-compose run app_mercado_livre
+        docker-compose exec app_mercado_livre poetry run python app.py 
 
     - name: Generate UUID Version
       id: uuid_version
