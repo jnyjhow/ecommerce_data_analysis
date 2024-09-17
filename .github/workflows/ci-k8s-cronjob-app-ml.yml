@@ -35,7 +35,7 @@ jobs:
 
     - name: Apply CronJob YAML
       run: |
-        kubectl apply -f .k8s/base/jobs/cronjob-app-mercado-livre.yaml
+        kubectl apply -f k8s/base/jobs/cronjob-app-mercado-livre.yaml
 
     - name: Run the CronJob manually
       run: |
