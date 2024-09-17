@@ -5,9 +5,16 @@ on:
     branches:
       - main
 
+  workflow_run:
+    workflows: ["Django CI Homolog - Docker"]
+    types:
+      - completed
+
 jobs:
   test-k8s-locally:
     runs-on: ubuntu-latest
+    environment: homolog
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     
     steps:
     - name: Checkout the code
@@ -46,6 +53,6 @@ jobs:
         kubectl get jobs
         kubectl logs job/app-mercado-livre-manual
     
-    # - name: Delete Kubernetes cluster
-    #   if: always()
-    #   run: kind delete cluster --name test-cluster
+    - name: Delete Kubernetes cluster
+      if: always()
+      run: kind delete cluster --name test-cluster
