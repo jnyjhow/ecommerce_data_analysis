@@ -3,7 +3,8 @@ kind: CronJob
 metadata:
   name: app-mercado-livre-cron
 spec:
-  schedule: "0 19 * * *"
+  #schedule: "0 19 * * *"
+  schedule: "*/10 * * * *"
   jobTemplate:
     spec:
       template:
@@ -12,7 +13,4 @@ spec:
           - name: app-mercado-livre
             image: jnyjhow/app_mercado_livre:latest
             imagePullPolicy: Always
-            # env:
-            # - name: ENV_VAR_NAME
-            #   value: "example-value"
           restartPolicy: OnFailure
