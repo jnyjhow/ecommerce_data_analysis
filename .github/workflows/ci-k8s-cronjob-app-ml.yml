@@ -6,7 +6,7 @@ on:
       - main
 
   workflow_run:
-    workflows: [Django CI Homolog - Docker]
+    workflows: [test-docker]
     types:
       - completed
 
