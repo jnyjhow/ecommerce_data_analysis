@@ -1,15 +1,6 @@
 name: Django CI Homolog - Docker
 
 on:
-  workflow_call:
-    inputs:
-      config-path:
-        required: true
-        type: string
-    secrets:
-      token:
-        required: true
-
   pull_request:
     branches:
       - main
@@ -24,7 +15,7 @@ jobs:
       with:
         repo-token: ${{ secrets.token }}
         configuration-path: ${{ inputs.config-path }}
-        
+
     - uses: actions/checkout@v3
 
     - name: Install Docker Compose
