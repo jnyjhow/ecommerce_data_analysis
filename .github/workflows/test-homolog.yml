@@ -11,11 +11,6 @@ jobs:
     environment: homolog
 
     steps:
-    - uses: actions/labeler@v4
-      with:
-        repo-token: ${{ secrets.token }}
-        configuration-path: ${{ inputs.config-path }}
-
     - uses: actions/checkout@v3
 
     - name: Install Docker Compose
