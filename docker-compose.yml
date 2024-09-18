@@ -20,7 +20,7 @@ services:
     container_name: app_mercado_livre
     environment:
       - PYTHONUNBUFFERED=1
-    #command: poetry run python app.py
+    command: poetry run python app.py
 
   # test:
   #   build:
