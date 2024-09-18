@@ -7,7 +7,6 @@ on:
 
 jobs:
   test-docker:
-    name: Run Django CI Homolog - Docker
     runs-on: ubuntu-latest
     environment: homolog
 
