@@ -58,13 +58,3 @@ jobs:
     - name: Stop and Remove Containers
       run: |
         docker-compose down
-    
-    - name: Save success artifact
-      if: ${{ success() }}
-      run: echo "success" > success.txt
-      
-    - name: Upload success artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: docker-test-success
-        path: success.txt
