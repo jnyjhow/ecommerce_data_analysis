@@ -6,7 +6,7 @@ on:
       - main
 
   workflow_run:
-    workflows: ["Django CI Homolog - Docker"]
+    workflows: [Django CI Homolog - Docker]
     types:
       - completed
 
@@ -14,7 +14,7 @@ jobs:
   test-k8s-locally:
     runs-on: ubuntu-latest
     environment: homolog
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'Success' }}
     
     steps:
     - name: Checkout the code
