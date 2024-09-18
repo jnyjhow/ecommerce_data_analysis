@@ -1,4 +1,4 @@
-name: Django CI Homolog - Docker
+name: CI Homolog with Docker and CI K8S Cronjob App ML
 
 on:
   pull_request:
@@ -25,10 +25,6 @@ jobs:
     - name: Verify Running Containers
       run: |
         docker ps
-    
-    # - name: Run Tests with Docker
-    #   run: |
-    #     docker-compose run --rm test
 
     - name: Run Python Script inside Docker [app_mercado_livre]
       run: |
@@ -57,3 +53,49 @@ jobs:
     - name: Stop and Remove Containers
       run: |
         docker-compose down
+
+  test-k8s-locally:
+    runs-on: ubuntu-latest
+    environment: homolog
+    needs: test-docker
+    
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v3
+      with:
+        version: latest
+
+    - name: Install KinD
+      run: |
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
+        chmod +x ./kind
+        sudo mv ./kind /usr/local/bin/kind
+
+    - name: Create Kubernetes cluster
+      run: kind create cluster --name test-cluster
+
+    - name: Install kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x ./kubectl
+        sudo mv ./kubectl /usr/local/bin/kubectl
+
+    - name: Apply CronJob YAML
+      run: |
+        kubectl apply -f k8s/base/jobs/cronjob-app-mercado-livre.yaml
+
+    - name: Run the CronJob manually
+      run: |
+        kubectl create job --from=cronjob/app-mercado-livre-cron app-mercado-livre-manual
+
+    - name: Check Job Status
+      run: |
+        kubectl get jobs
+        kubectl logs job/app-mercado-livre-manual
+    
+    - name: Delete Kubernetes cluster
+      if: always()
+      run: kind delete cluster --name test-cluster
