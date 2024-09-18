@@ -5,10 +5,13 @@ on:
     branches:
       - main
 
-  workflow_run:
-    workflows: ["Django CI Homolog - Docker"]
-    types:
-      - completed
+  # workflow_run:
+  #   workflows: ["Django CI Homolog - Docker"]
+  #   types:
+  #     - completed
+
+  repository_dispatch:
+    types: [ci-k8s-cronjob-app-ml]
 
 jobs:
   test-k8s-locally:
