@@ -1,20 +1,17 @@
 name: CI Test Kubernetes Locally
 
-on:
+on:  
   pull_request:
     branches:
       - main
 
-  workflow_run:
-    workflows: ["Django CI Homolog - Docker"]
-    types:
-      - completed
-
 jobs:
+  call-workflow-in-local-repo:
+    uses: ./.github/workflows/ci-k8s-cronjob-app-ml.yml
+  
   test-k8s-locally:
     runs-on: ubuntu-latest
     environment: homolog
-    if: ${{ github.event.workflow_run.conclusion == 'skipped' }}
     
     steps:
     - name: Checkout the code
