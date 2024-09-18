@@ -1,4 +1,4 @@
-name: Django CI Dev - Local
+name: CI Dev - Local
 
 on:
   push:
