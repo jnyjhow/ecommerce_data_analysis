@@ -6,7 +6,7 @@ Modificado em: 11/09/2024
 @author: jny_jhow
 """
 
-#functions
+# functions
 import os
 import warnings
 warnings.filterwarnings('ignore')
@@ -21,6 +21,7 @@ import cloudscraper
 
 from bs4 import BeautifulSoup
 from time import sleep, time
+from datetime import datetime
 
 
 def pfun_check_dir(path):
@@ -123,4 +124,3 @@ def pfun_get_df(lista_aux):
     print(df_aux.tail())
     
     return df_aux
-
