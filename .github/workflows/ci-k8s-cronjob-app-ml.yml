@@ -5,18 +5,20 @@ on:
     branches:
       - main
 
-  workflow_run:
-    workflows: [test-docker]
-    types:
-      - completed
-
 jobs:
   test-k8s-locally:
     runs-on: ubuntu-latest
     environment: homolog
-    if: ${{ github.event.workflow_run.conclusion == 'Success' }}
-    
+
     steps:
+    - name: Wait for Django CI Homolog - Docker
+      uses: lewagon/wait-on-check-action@v1.3.4
+      with:
+        ref: ${{ github.ref }}
+        check-name: 'Run Django CI Homolog - Docker'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        wait-interval: 10
+
     - name: Checkout the code
       uses: actions/checkout@v3
 
