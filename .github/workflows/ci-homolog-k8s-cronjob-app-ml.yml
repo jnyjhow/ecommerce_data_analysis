@@ -1,4 +1,4 @@
-name: CI Homolog with Docker and CI K8S Cronjob App ML
+name: CI Homolog - Docker and CI K8S Cronjob App ML
 
 on:
   pull_request:

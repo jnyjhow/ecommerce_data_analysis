@@ -1,4 +1,4 @@
-name: CI Homolog with Airflow DAG
+name: CI Homolog - Airflow DAG
 
 on:
   pull_request:
