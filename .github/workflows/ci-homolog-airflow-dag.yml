@@ -60,10 +60,11 @@ jobs:
 
       - name: Test DAG "test_communication_dag" status
         run: |
-          docker-compose exec airflow-webserver airflow dags list | grep "test_communication_dag"
-          docker-compose exec airflow-webserver airflow dags trigger test_communication_dag
+          docker-compose exec -T airflow-webserver airflow dags list | grep "test_communication_dag"
+          docker-compose exec -T airflow-webserver airflow dags trigger test_communication_dag
           sleep 30  # Wait for DAG execution
-          docker-compose exec airflow-webserver airflow dags state test_communication_dag $(date +'%Y-%m-%d') || exit 1
+          docker-compose exec -T airflow-webserver airflow dags state test_communication_dag $(date +'%Y-%m-%d') || exit 1
+        shell: bash
 
       - name: Stop and clean up Docker Compose
         run: |
