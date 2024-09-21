@@ -114,6 +114,7 @@ services:
     restart: always
 
   app_mercado_livre:
+    image: app_mercado_livre:latest
     build:
       context: .
       dockerfile: docker/ws_mercado_livre/Dockerfile
