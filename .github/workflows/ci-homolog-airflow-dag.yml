@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test-airflow:
+    runs-on: [self-hosted, X-Large]
     environment: homolog
 
     services:
