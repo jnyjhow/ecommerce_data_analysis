@@ -26,7 +26,10 @@ from time import sleep, time
 
 def pfun_check_dir(path):
     if not os.path.exists(path):
-        os.makedirs(path)
+        try:
+            os.makedirs(path)
+        except:
+            pass
     else:
         pass
 
