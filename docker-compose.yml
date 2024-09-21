@@ -115,7 +115,7 @@ services:
 
   app_mercado_livre:
     image: app_mercado_livre:latest
-    mem_limit: 2g
+    mem_limit: 6g
     build:
       context: .
       dockerfile: docker/ws_mercado_livre/Dockerfile
