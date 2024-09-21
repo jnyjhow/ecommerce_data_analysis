@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: homolog
 
+    env:
+      AIRFLOW_UID: 1000
+      AIRFLOW_PROJ_DIR: ./airflow
+
     services:
       postgres:
         image: postgres:13

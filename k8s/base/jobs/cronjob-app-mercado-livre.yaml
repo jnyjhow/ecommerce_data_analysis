@@ -13,4 +13,5 @@ spec:
           - name: app-mercado-livre
             image: jnyjhow/app_mercado_livre:latest
             imagePullPolicy: Always
+            command: ["poetry", "run", "python", "app.py"]
           restartPolicy: OnFailure
