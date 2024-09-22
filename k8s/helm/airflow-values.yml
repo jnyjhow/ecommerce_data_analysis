@@ -1,0 +1,36 @@
+executor: "KubernetesExecutor"
+
+webserverSecretKeySecretName: my-webserver-secret-key
+
+env:
+  - name: AIRFLOW__CORE__LOAD_EXAMPLES
+    value: "False"
+
+extraSecrets:
+  my-webserver-secret-key:
+    data: |
+      webserver-secret-key: T0s1dXpyNXZDOWtYOExQWld6cE1qd2VLS2ZKdnNxMlc=
+
+airflow:
+  extraVolumeMounts:
+    - name: airflow-dags-pv
+      mountPath: /opt/airflow/dags
+    - name: airflow-logs-pv
+      mountPath: /opt/airflow/logs
+    - name: airflow-config-pv
+      mountPath: /opt/airflow/config
+    - name: airflow-plugins-pv
+      mountPath: /opt/airflow/plugins
+  extraVolumes:
+    - name: airflow-dags-pv
+      persistentVolumeClaim:
+        claimName: airflow-dags-pvc
+    - name: airflow-logs-pv
+      persistentVolumeClaim:
+        claimName: airflow-logs-pvc
+    - name: airflow-config-pv
+      persistentVolumeClaim:
+        claimName: airflow-config-pvc
+    - name: airflow-plugins-pv
+      persistentVolumeClaim:
+        claimName: airflow-plugins-pvc
