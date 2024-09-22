@@ -1,0 +1,71 @@
+name: CI Homolog - Airflow DAG
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-airflow:
+    runs-on: ubuntu-latest
+    environment: homolog
+
+    env:
+      AIRFLOW_UID: 1000
+      AIRFLOW_PROJ_DIR: ./airflow
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: airflow
+          POSTGRES_PASSWORD: airflow
+          POSTGRES_DB: airflow
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U airflow"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+      redis:
+        image: redis:7.2-bookworm
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Docker Compose
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y docker-compose
+
+      - name: Build and Start Docker Compose
+        run: |
+          docker-compose -f docker-compose.yml up -d --build
+
+      - name: Wait for Airflow to be healthy
+        run: |
+          while ! curl -f http://localhost:8080/health; do
+            echo "Waiting for Airflow Webserver to be healthy..."
+            sleep 10
+          done
+
+      - name: Test DAG "test_communication_dag" status
+        run: |
+          docker-compose exec -T airflow-webserver airflow dags list | grep "test_communication_dag"
+          docker-compose exec -T airflow-webserver airflow dags trigger test_communication_dag
+          sleep 30  # Wait for DAG execution
+          docker-compose exec -T airflow-webserver airflow dags state test_communication_dag $(date +'%Y-%m-%d') || exit 1
+        shell: bash
+
+      - name: Stop and clean up Docker Compose
+        run: |
+          docker-compose down

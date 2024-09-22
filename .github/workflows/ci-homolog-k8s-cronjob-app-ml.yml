@@ -1,4 +1,4 @@
-name: CI Homolog with Docker and CI K8S Cronjob App ML
+name: CI Homolog - Docker and CI K8S Cronjob App ML
 
 on:
   pull_request:
@@ -18,9 +18,13 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y docker-compose
 
-    - name: Build and Start Docker Containers
+    # - name: Build and Start Docker Containers
+    #   run: |
+    #     docker-compose up --build -d
+
+    - name: Build and Start Only app_mercado_livre Container
       run: |
-        docker-compose up --build -d
+        docker-compose up --build -d app_mercado_livre
 
     - name: Verify Running Containers
       run: |
