@@ -20,10 +20,10 @@ default_args = {
 }
 
 with DAG(
-    dag_id='test_communication_dag',
+    dag_id="fastapi_communication_dag",
     default_args=default_args,
-    schedule_interval='@once',
-    catchup=False
+    schedule_interval="@once",
+    catchup=False,
 ) as dag:
     test_task = PythonOperator(
         task_id='test_communication_task',

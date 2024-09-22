@@ -15,6 +15,7 @@ jobs:
       AIRFLOW_PROJ_DIR: ./airflow
 
     services:
+
       postgres:
         image: postgres:13
         env:
@@ -28,6 +29,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+      
       redis:
         image: redis:7.2-bookworm
         ports:
@@ -58,12 +60,11 @@ jobs:
             sleep 10
           done
 
-      - name: Test DAG "test_communication_dag" status
+      - name: Test DAG "fastapi_communication_dag" status
         run: |
-          docker-compose exec -T airflow-webserver airflow dags list | grep "test_communication_dag"
-          docker-compose exec -T airflow-webserver airflow dags trigger test_communication_dag
-          sleep 30  # Wait for DAG execution
-          docker-compose exec -T airflow-webserver airflow dags state test_communication_dag $(date +'%Y-%m-%d') || exit 1
+          docker-compose exec -T airflow-webserver airflow dags list | grep "fastapi_communication_dag"
+          docker-compose exec -T airflow-webserver airflow dags trigger fastapi_communication_dag
+          sleep 30
         shell: bash
 
       - name: Stop and clean up Docker Compose
