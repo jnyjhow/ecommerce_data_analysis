@@ -26,6 +26,6 @@ with DAG(
     catchup=False,
 ) as dag:
     test_task = PythonOperator(
-        task_id='test_communication_task',
+        task_id='fastapi_communication_task',
         python_callable=test_communication
     )
