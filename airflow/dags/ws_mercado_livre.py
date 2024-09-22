@@ -16,7 +16,7 @@ default_args = {
 }
 
 dag = DAG(
-    dag_id="ws_mercado_livre",
+    dag_id="ws_mercado_livre_dag",
     default_args=default_args,
     description="DAG para processar ofertas do Mercado Livre",
     schedule_interval=timedelta(days=1),
