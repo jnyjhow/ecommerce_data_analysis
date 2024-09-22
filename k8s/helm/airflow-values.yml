@@ -13,7 +13,7 @@ extraSecrets:
 
 images:
   airflow:
-    repository: jnyjhow/app_airflow
+    repository: jnyjhow/airflow-webserver
     tag: latest
 
 # airflow:
