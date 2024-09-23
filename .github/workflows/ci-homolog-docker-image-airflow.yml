@@ -40,8 +40,10 @@ jobs:
           script: return crypto.randomUUID()
 
       - name: Build and Push Docker Image
+        env:
+            DOCKER_REGISTRY: ${{ vars.DOCKER_REGISTRY }}
         run: |
-          IMAGE_NAME="${{ vars.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}"
+          IMAGE_NAME="${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}"
           UUID_VERSION=${{ steps.uuid_version.outputs.uuid }}
           docker build -f docker/airflow/Dockerfile -t $IMAGE_NAME:latest -t $IMAGE_NAME:$UUID_VERSION .
           docker push $IMAGE_NAME --all-tags
