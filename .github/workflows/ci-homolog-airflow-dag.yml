@@ -1,7 +1,7 @@
 name: CI Homolog - Airflow DAG
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
