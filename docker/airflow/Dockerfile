@@ -14,4 +14,8 @@ COPY ./pyproject.toml ./poetry.lock ./
 RUN poetry install --no-root
 
 COPY src/ws_mercado_livre /opt/airflow/ws_mercado_livre
+COPY airflow/dags /opt/airflow/dags
+COPY airflow/logs /opt/airflow/logs
+COPY airflow/config /opt/airflow/config
+COPY airflow/plugins /opt/airflow/plugins
 USER airflow
