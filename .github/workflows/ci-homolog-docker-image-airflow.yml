@@ -1,7 +1,7 @@
 name: CI Homolog - Build and Push Docker Image Airflow
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
