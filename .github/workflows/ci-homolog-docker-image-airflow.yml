@@ -36,21 +36,12 @@ jobs:
 
       - name: Generate UUID Version
         id: uuid_version
-        uses: actions/github-script@v6
-        with:
-          script: return crypto.randomUUID()
+        run: echo "::set-output name=uuid::$(uuidgen)"
 
       - name: Build and Push Docker Image
         run: |
           IMAGE_NAME="${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}"
           UUID_VERSION=${{ steps.uuid_version.outputs.uuid }}
-          
-          # Verify UUID_VERSION is not empty
-          if [ -z "$UUID_VERSION" ]; then
-            echo "UUID version is empty!"
-            exit 1
-          fi
-          
           docker build -f docker/airflow/Dockerfile -t $IMAGE_NAME:latest -t $IMAGE_NAME:$UUID_VERSION .
           docker push $IMAGE_NAME --all-tags
 
