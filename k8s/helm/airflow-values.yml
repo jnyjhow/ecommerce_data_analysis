@@ -11,9 +11,7 @@ extraSecrets:
     data: |
       webserver-secret-key: T0s1dXpyNXZDOWtYOExQWld6cE1qd2VLS2ZKdnNxMlc=
 
-images:
-  airflow:
-    repository: jnyjhow/app_airflow
-    tag: {{ .Values.airflowImageTag | default "latest" }}
-    
-airflowImageTag: "latest"
+# images:
+#   airflow:
+#     repository: jnyjhow/app_airflow
+#     tag: "latest"
