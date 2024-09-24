@@ -10,7 +10,7 @@ ENV PATH=/opt/.venv/bin:$PATH
 WORKDIR /app
 RUN pip install --upgrade pip
 
-COPY requirements.txt /app/
+COPY requirements_test.txt ./requirements.txt
 RUN pip install -r requirements.txt
 # RUN pip install selenium
 # RUN pip install selenium --break-system-packages
