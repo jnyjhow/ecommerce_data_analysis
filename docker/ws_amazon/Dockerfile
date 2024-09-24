@@ -15,7 +15,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY ./src/ws_amazon .
-COPY ./drivers ./drivers
+#COPY ./drivers ./drivers
 
 RUN chmod 775 -R drivers 
 
