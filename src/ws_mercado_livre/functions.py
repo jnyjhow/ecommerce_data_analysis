@@ -119,7 +119,7 @@ def pfun_ml_get_product(count, div_aux):
         dados["installments"] = installments
         dados["seller"] = seller_name
 
-        # print(dados)
+        print(dados)
 
     except Exception as e:
         print(f"Erro ao processar item: {e}")

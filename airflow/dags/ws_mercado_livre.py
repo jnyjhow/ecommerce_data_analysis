@@ -1,8 +1,8 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime, timedelta
-from variables import *
-from functions import *
+from ws_mercado_livre.variables import *
+from ws_mercado_livre.functions import *
 
 default_args = {
     "owner": "airflow",

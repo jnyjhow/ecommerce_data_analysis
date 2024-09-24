@@ -16,7 +16,7 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY requirements_test.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./src/examples/selenium_example.py .

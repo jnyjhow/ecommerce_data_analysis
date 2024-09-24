@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: app-amazon-cron
+spec:
+  schedule: "* */2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: app-amazon
+            image: jnyjhow/app_amazon:latest
+            imagePullPolicy: Always
+            command: ["python", "app.py"]
+          restartPolicy: OnFailure

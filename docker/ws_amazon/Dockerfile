@@ -1,37 +1,20 @@
-FROM python:3.12-slim
+FROM selenium/standalone-chrome:latest
+
+USER root
+
+RUN apt-get update && apt-get install -y python3 python3-pip python3-venv && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m venv /opt/.venv
+ENV PATH=/opt/.venv/bin:$PATH
 
 WORKDIR /app
+RUN pip install --upgrade pip
 
-RUN apt-get update && apt-get install -y \
-    curl \
-    wget \
-    xvfb
+COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# RUN apt-get update && \
-#     apt-get install -y wget xvfb apt-transport-https ca-certificates curl gnupg --no-install-recommends && \
-#     apt-get clean && \
-#     rm -rf /var/lib/apt/lists/*
-
-RUN Xvfb :99 & \
-    export DISPLAY=:99
-
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    dpkg -i google-chrome-stable_current_amd64.deb || apt-get install -f -y && \
-    rm google-chrome-stable_current_amd64.deb
-
-#CMD ["google-chrome", "--version"]
-#CMD echo "Google Chrome version: $(google-chrome --version)"
-
-RUN curl -sSL https://install.python-poetry.org | python3 -
-
-ENV PATH="/root/.local/bin:$PATH"
-
-COPY ./pyproject.toml ./poetry.lock ./
-
-RUN poetry install --no-root
-
-COPY ./src/ws_amazon /app/
-COPY ./drivers /app/drivers
+COPY ./src/ws_amazon .
 
 RUN apt-get remove --purge -y \
     && apt-get autoremove -y \
@@ -39,4 +22,4 @@ RUN apt-get remove --purge -y \
     && rm -rf /var/lib/apt/lists/*
 
 CMD ["tail", "-f", "/dev/null"]
-#CMD ["poetry", "run", "python", "app.py"]
+#CMD ["python", "app.py"]
