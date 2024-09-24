@@ -139,5 +139,6 @@ GitHub.sublime-settings
 
 #others files
 tutorial.txt
-
+drivers/*
+downloaded_files
 
