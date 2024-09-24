@@ -1,0 +1,101 @@
+name: CI Homolog - Docker and CI K8S Cronjob App Amazon
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-docker:
+    runs-on: ubuntu-latest
+    environment: homolog
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
+    - name: Build and Start Only app_amazon Container
+      run: |
+        docker-compose up --build -d app_amazon
+
+    - name: Verify Running Containers
+      run: |
+        docker ps
+
+    - name: Run Python Script inside Docker [app_amazon]
+      run: |
+        docker-compose exec -T app_amazon python app.py
+      shell: bash
+
+    - name: Generate UUID Version
+      id: uuid_version
+      run: echo "::set-output name=uuid::$(uuidgen)"
+
+    - name: Tag and Push Docker Image
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_REGISTRY: ${{ vars.DOCKER_REGISTRY }}
+        DOCKER_IMAGE_NAME: app_amazon
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        IMAGE_NAME="${{ env.DOCKER_REGISTRY }}/${{ env.DOCKER_IMAGE_NAME }}"
+        UUID_VERSION=${{ steps.uuid_version.outputs.uuid }}
+        docker tag ${{ env.DOCKER_IMAGE_NAME }}:latest $IMAGE_NAME:latest
+        docker tag ${{ env.DOCKER_IMAGE_NAME }}:latest $IMAGE_NAME:$UUID_VERSION
+        docker push $IMAGE_NAME:latest
+        docker push $IMAGE_NAME:$UUID_VERSION
+
+    - name: Stop and Remove Containers
+      run: |
+        docker-compose down
+
+  test-k8s-locally:
+    runs-on: ubuntu-latest
+    environment: homolog
+    needs: test-docker
+    
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v3
+      with:
+        version: latest
+
+    - name: Install KinD
+      run: |
+        curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64
+        chmod +x ./kind
+        sudo mv ./kind /usr/local/bin/kind
+
+    - name: Create Kubernetes cluster
+      run: kind create cluster --name test-cluster
+
+    - name: Install kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x ./kubectl
+        sudo mv ./kubectl /usr/local/bin/kubectl
+
+    - name: Apply CronJob YAML
+      run: |
+        kubectl apply -f k8s/base/jobs/cronjob-app-amazon.yaml
+
+    - name: Run the CronJob manually
+      run: |
+        kubectl create job --from=cronjob/app-amazon-cron app-amazon-manual
+
+    - name: Check Job Status
+      run: |
+        kubectl get jobs
+        kubectl logs job/app-amazon-manual
+    
+    - name: Delete Kubernetes cluster
+      if: always()
+      run: kind delete cluster --name test-cluster
