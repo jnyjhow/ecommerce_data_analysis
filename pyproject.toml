@@ -15,10 +15,8 @@ cloudscraper = "^1.2.71"
 bs4 = "^0.0.2"
 prometheus-fastapi-instrumentator = "^7.0.0"
 prometheus-client = "^0.20.0"
-selenium = "^4.25.0"
 pyvirtualdisplay = "^3.0"
-undetected-chromedriver = "^3.5.5"
-seleniumbase = "^4.31.0"
+selenium = "^4.25.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
