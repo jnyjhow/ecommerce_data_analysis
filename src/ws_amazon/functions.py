@@ -22,16 +22,18 @@ import cloudscraper
 from bs4 import BeautifulSoup
 from time import sleep, time
 
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from pyvirtualdisplay import Display
-from selenium.webdriver.chrome.options import Options
-import undetected_chromedriver as uc
-from seleniumbase import Driver
+# import undetected_chromedriver as uc
+# from seleniumbase import Driver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 
 
 def pfun_check_dir(path):
@@ -65,7 +67,7 @@ def pfun_amazon_get_product(div_aux):
         except:
             dados['discount'] = None
         
-        # print(dados)
+        print(dados)
         
     except Exception as e:
         print(f"Erro ao processar item: {e}")
@@ -105,7 +107,7 @@ def pfun_get_df(lista_aux):
     if len(lista_aux) > 0:
 
         df_aux = pd.DataFrame(lista_aux).reset_index(drop=True)
-        df_aux_mod = df_aux.drop_duplicates(inplace=True).reset_index(drop=True)
+        df_aux_mod = df_aux.drop_duplicates().reset_index(drop=True)
         print(df_aux.shape)
         print(df_aux.head())
         print(df_aux.tail())
@@ -117,25 +119,14 @@ def pfun_chrome_get_driver(tipo=1, mostrar_driver=True):
 
     if (tipo == 1):
 
-        VAR_PATH_CHROME_DRIVER = f"{VAR_PATH_PRINCIPAL}/{VAR_PATH_DRIVER}"
-
         options = Options()
         options.add_argument("--start-maximized")
         options.add_argument("--disable-extensions")
         options.add_argument("--incognito")
 
-        if not mostrar_driver:
-            driver = uc.Chrome(
-                driver_executable_path=VAR_PATH_CHROME_DRIVER,
-                options=options,
-                headless=True
-                )
-        else:
-            driver = uc.Chrome(
-                driver_executable_path=VAR_PATH_CHROME_DRIVER,
-                options=options
-                )
-        driver.execute_script('return navigator.webdriver')
+        VAR_PATH_CHROME_DRIVER = f"{VAR_PATH_PRINCIPAL}/{VAR_PATH_DRIVER}"
+        service = Service(executable_path=VAR_PATH_CHROME_DRIVER)
+        driver = webdriver.Chrome(service=service, options=options)
 
         display = None
 
@@ -146,16 +137,18 @@ def pfun_chrome_get_driver(tipo=1, mostrar_driver=True):
         print('\n>>>>> INICIANDO DISPLAY!!! <<<<<\n')
 
         options = Options()
-        options.add_argument("--start-maximized")
-        options.add_argument("--disable-extensions")
-        options.add_argument("--incognito")
+        # options.add_argument("--headless")
+        # options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        # options.add_argument("--start-maximized")
+        # options.add_argument("--disable-extensions")
+        # options.add_argument("--incognito")
 
         VAR_PATH_CHROME_DRIVER = f"{VAR_PATH_PRINCIPAL}/{VAR_PATH_DRIVER}"
-        driver = uc.Chrome(
-            driver_executable_path=VAR_PATH_CHROME_DRIVER,
-            options=options
-            )
-        driver.execute_script('return navigator.webdriver')
+        # print(VAR_PATH_CHROME_DRIVER)
+        service = Service(executable_path=VAR_PATH_CHROME_DRIVER)
+        # driver = webdriver.Chrome(service=service, options=options)
+        driver = webdriver.Chrome(options=options)
 
     else:
         print('DRIVER NAO LOCALIZADO!!!')
