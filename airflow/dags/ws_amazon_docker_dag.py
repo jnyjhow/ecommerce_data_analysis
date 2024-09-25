@@ -3,7 +3,7 @@ from airflow.operators.docker_operator import DockerOperator
 from datetime import datetime
 
 with DAG(
-    "ws_amazon_dag",
+    "docker_ws_amazon_dag",
     default_args={
         "owner": "airflow",
         "start_date": datetime(2023, 9, 24),
@@ -14,16 +14,15 @@ with DAG(
 ) as dag:
 
     run_docker = DockerOperator(
-        task_id="run_docker_image",
+        task_id="docker_ws_amazon_task",
         image="jnyjhow/app_amazon:latest",
         api_version="auto",
         auto_remove=True,
         docker_url="unix://var/run/docker.sock",
         network_mode="bridge",
+        # network_mode="airflow_network",
         command="python app.py",
-        environment={
-            "EXAMPLE_VAR": "value"
-        },
+        environment={"EXAMPLE_VAR": "value"},
         mount_tmp_dir=False,
     )
 

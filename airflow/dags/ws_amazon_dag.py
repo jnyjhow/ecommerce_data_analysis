@@ -1,8 +1,16 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from datetime import datetime, timedelta
-from ws_mercado_livre.variables import *
-from ws_mercado_livre.functions import *
+
+import sys
+import os
+
+PATH_LOCAL = os.getcwd()
+PATH_LOCAL_APPEND = os.path.join(PATH_LOCAL, 'ws_amazon')
+sys.path.append(PATH_LOCAL_APPEND)
+
+from variables import *
+from functions import *
 
 default_args = {
     "owner": "airflow",
@@ -16,9 +24,9 @@ default_args = {
 }
 
 dag = DAG(
-    dag_id="ws_mercado_livre_dag",
+    dag_id="ws_amazon_dag",
     default_args=default_args,
-    description="DAG para processar ofertas do Mercado Livre",
+    description="DAG para processar ofertas da Amazon",
     schedule_interval=timedelta(days=1),
 )
 
@@ -28,7 +36,7 @@ def check_directory(**kwargs):
 
 
 def get_offers(**kwargs):
-    lista_ofertas = pfun_ml_get_products()
+    lista_ofertas = pfun_amazon_get_products()
     return lista_ofertas
 
 
