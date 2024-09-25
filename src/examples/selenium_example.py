@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
 import sys
 
@@ -21,7 +22,9 @@ options.add_argument("--disable-dev-shm-usage")
 # options.add_argument("--log-level=3")
 
 chromedriver_path = "drivers/chromedriver"
-service = Service(executable_path=chromedriver_path)
+# service = Service(executable_path=chromedriver_path)
+service = Service(ChromeDriverManager().install())
+
 driver = webdriver.Chrome(service=service, options=options)
 # driver = webdriver.Chrome(options=options)
 

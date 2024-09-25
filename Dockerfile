@@ -3,7 +3,8 @@ FROM python:3.12-slim
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    curl
+    curl && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
@@ -13,7 +14,7 @@ COPY pyproject.toml poetry.lock ./
 
 RUN poetry install --no-root
 
-COPY ./src /app/
+COPY ./src/fast_api .
 
 RUN apt-get remove --purge -y \
     && apt-get autoremove -y \

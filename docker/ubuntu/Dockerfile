@@ -16,7 +16,7 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 
 WORKDIR /app
 
-COPY requirements.txt /app/
+COPY requirements_test.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
 COPY ./src/examples/selenium_example.py /app/selenium_example.py
