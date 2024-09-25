@@ -63,7 +63,7 @@ x-airflow-common:
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
-    AIRFLOW__CORE__LOAD_EXAMPLES: 'true'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
     # yamllint disable rule:line-length
     # Use simple http server on scheduler for health checks
@@ -76,13 +76,17 @@ x-airflow-common:
     # The following line can be used to set a custom config file, stored in the local config folder
     # If you want to use it, outcomment it and replace airflow.cfg with the name of your config file
     # AIRFLOW_CONFIG: '/opt/airflow/config/airflow.cfg'
-    PYTHONPATH: /opt/airflow/ws_mercado_livre:${PYTHONPATH}
+    # PYTHONPATH: /opt/airflow/ws_mercado_livre:${PYTHONPATH}
+    # PYTHONPATH: /opt/airflow/ws_mercado_livre:/opt/airflow/ws_amazon
+    # PYTHONPATH: /opt/airflow:${PYTHONPATH}
+
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
     #- ./src/ws_mercado_livre:/opt/airflow/ws_mercado_livre
+    #- ~/.kube/config:/opt/airflow/config/kubeconfig
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -124,6 +128,8 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     #command: poetry run python app.py
+    # networks:
+    #   - airflow_network
   
   app_amazon:
     image: app_amazon:latest
@@ -132,6 +138,8 @@ services:
       dockerfile: docker/ws_amazon/Dockerfile
     container_name: app_amazon
     #command: python app.py
+    # networks:
+    #   - airflow_network
 
   postgres:
     image: postgres:13
@@ -182,6 +190,8 @@ services:
         condition: service_completed_successfully
       app_fastapi:
         condition: service_healthy
+    # networks:
+    #   - airflow_network
 
   airflow-scheduler:
     <<: *airflow-common
@@ -339,3 +349,12 @@ services:
 
 volumes:
   postgres-db-volume:
+
+# networks:
+#   airflow_network:
+#     driver: bridge
+
+# networks:
+#   default:
+#     external:
+#       name: airflow-k3d-network
