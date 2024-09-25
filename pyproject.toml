@@ -19,6 +19,7 @@ pyvirtualdisplay = "^3.0"
 selenium = "^4.25.0"
 apache-airflow-providers-cncf-kubernetes = "^8.4.1"
 webdriver-manager = "^4.0.2"
+apache-airflow-providers-docker = "^3.14.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
