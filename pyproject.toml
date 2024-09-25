@@ -6,7 +6,7 @@ authors = ["jnyjhow <jhonatan_yamane@hotmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.10,<3.13"
 pandas = "^2.2.2"
 fastapi = "^0.112.2"
 uvicorn = "^0.30.6"
@@ -17,6 +17,8 @@ prometheus-fastapi-instrumentator = "^7.0.0"
 prometheus-client = "^0.20.0"
 pyvirtualdisplay = "^3.0"
 selenium = "^4.25.0"
+apache-airflow-providers-cncf-kubernetes = "^8.4.1"
+webdriver-manager = "^4.0.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
