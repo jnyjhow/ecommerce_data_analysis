@@ -27,7 +27,8 @@ dag = DAG(
     dag_id="ws_amazon_dag",
     default_args=default_args,
     description="DAG para processar ofertas da Amazon",
-    schedule_interval=timedelta(days=1),
+    # schedule_interval=timedelta(days=1),
+    schedule_interval=None,
 )
 
 
