@@ -34,7 +34,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-#from webdriver_manager.chrome import ChromeDriverManager
+# from webdriver_manager.chrome import ChromeDriverManager
 
 
 def pfun_check_dir(path):
@@ -145,12 +145,19 @@ def pfun_chrome_get_driver(tipo=1, mostrar_driver=True):
         # options.add_argument("--disable-extensions")
         # options.add_argument("--incognito")
 
-        VAR_PATH_CHROME_DRIVER = f"{VAR_PATH_PRINCIPAL}/{VAR_PATH_DRIVER}"
-        print(VAR_PATH_CHROME_DRIVER)
+        # VAR_PATH_CHROME_DRIVER = f"{VAR_PATH_PRINCIPAL}/{VAR_PATH_DRIVER}"
+        # VAR_PATH_CHROME_DRIVER = "/usr/local/bin/chromedriver"
+        # print(VAR_PATH_CHROME_DRIVER)
         # service = Service(executable_path=VAR_PATH_CHROME_DRIVER)
         # service = Service(ChromeDriverManager().install())
         # driver = webdriver.Chrome(service=service, options=options)
-        driver = webdriver.Chrome(options=options)
+        # driver = webdriver.Chrome(options=options)
+
+        driver = webdriver.Remote(
+            # command_executor="http://app_selenium:4444/wd/hub", 
+            command_executor="http://app_selenium:4444", 
+            options=options
+        )
 
     else:
         print('DRIVER NAO LOCALIZADO!!!')
