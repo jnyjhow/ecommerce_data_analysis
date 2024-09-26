@@ -18,7 +18,7 @@ with DAG(
         task_id="ws_amazon_docker_task",
         image="jnyjhow/app_amazon:latest",
         command=["python", "app.py"],
-        #auto_remove=True,
+        # auto_remove=True,
         auto_remove='success',
         docker_url="unix://var/run/docker.sock",
         network_mode="ecommerce_data_analysis_default",
