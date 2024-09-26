@@ -17,7 +17,9 @@ with DAG(
     executar_imagem_docker = DockerOperator(
         task_id="ws_amazon_docker_task",
         image="jnyjhow/app_amazon:latest",
-        auto_remove=True,
+        command=["python", "app.py"],
+        # auto_remove=True,
+        auto_remove='success',
         docker_url="unix://var/run/docker.sock",
-        network_mode="bridge",
+        network_mode="ecommerce_data_analysis_default",
     )

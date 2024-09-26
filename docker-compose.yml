@@ -58,6 +58,7 @@ x-airflow-common:
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+    # AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
@@ -85,9 +86,12 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
-    #- ./src/ws_mercado_livre:/opt/airflow/ws_mercado_livre
+    - /var/run/docker.sock:/var/run/docker.sock
+    # - /var/run/docker.sock:/var/run/docker.sock:rw
     #- ~/.kube/config:/opt/airflow/config/kubeconfig
-  user: "${AIRFLOW_UID:-50000}:0"
+    #- ./src/ws_mercado_livre:/opt/airflow/ws_mercado_livre
+  # user: "${AIRFLOW_UID:-50000}:0"
+  user: root
   depends_on:
     &airflow-common-depends-on
     redis:
@@ -97,10 +101,22 @@ x-airflow-common:
 
 services:
 
+  app_selenium:
+    image: selenium/standalone-chrome:latest
+    ports:
+      - "4444:4444"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:4444/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+
   app_fastapi:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/fast_api/Dockerfile
     container_name: app_fastapi
     environment:
       - PYTHONUNBUFFERED=1
@@ -137,6 +153,8 @@ services:
       context: .
       dockerfile: docker/ws_amazon/Dockerfile
     container_name: app_amazon
+    environment:
+      - PYTHONUNBUFFERED=1
     #command: python app.py
     # networks:
     #   - airflow_network
@@ -190,6 +208,8 @@ services:
         condition: service_completed_successfully
       app_fastapi:
         condition: service_healthy
+      app_selenium:
+        condition: service_healthy
     # networks:
     #   - airflow_network
 
@@ -208,6 +228,8 @@ services:
       airflow-init:
         condition: service_completed_successfully
       app_fastapi:
+        condition: service_healthy
+      app_selenium:
         condition: service_healthy
 
   airflow-worker:
